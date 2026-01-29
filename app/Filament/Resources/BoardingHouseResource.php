@@ -20,7 +20,14 @@ class BoardingHouseResource extends Resource
 {
     protected static ?string $model = BoardingHouse::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-home-modern';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    protected static ?string $navigationGroup = 'Boarding House Management';
 
     public static function form(Form $form): Form
     {
@@ -32,7 +39,7 @@ class BoardingHouseResource extends Resource
                             ->schema([
                                 Forms\Components\FileUpload::make('thumbnail')
                                     ->image()
-                                    ->directory('boarding_house')
+                                    ->directory('boarding_houses')
                                     ->required()
                                     ->columnSpan(2),
                                 Forms\Components\TextInput::make('name')
