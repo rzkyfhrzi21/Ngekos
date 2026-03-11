@@ -3,14 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\City;
-use App\Models\Category;
-use App\Models\BoardingHouse;
-use App\Models\Room;
-use App\Models\Bonus;
-use App\Models\Testimonial;
-use App\Models\Transaction;
-use App\Models\RoomImage;
+use App\Models\{BoardingHouse, Bonus, Category, City, Room, RoomImage, Testimonial, Transaction};
 
 class DatabaseSeeder extends Seeder
 {
@@ -75,6 +68,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Kos nyaman dekat kampus.',
                 'price' => 800000,
                 'address' => 'Jl. Zainal Abidin Pagar Alam',
+                // 'transactions_count' => '5',
             ]
         );
 
@@ -88,6 +82,8 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Kos eksklusif khusus putri.',
                 'price' => 900000,
                 'address' => 'Jl. AH Nasution',
+                // 'transactions_count' => '5',
+
             ]
         );
 
@@ -101,6 +97,8 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Kos campur fasilitas lengkap.',
                 'price' => 750000,
                 'address' => 'Jl. Soekarno Hatta',
+                // 'transactions_count' => '5',
+
             ]
         );
 

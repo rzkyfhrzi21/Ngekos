@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
 class BoardingHouse extends Model
 {
@@ -18,7 +17,8 @@ class BoardingHouse extends Model
         'category_id',
         'description',
         'price',
-        'address'
+        'address',
+        // 'transactions_count'
     ];
 
     public function city()
@@ -41,7 +41,7 @@ class BoardingHouse extends Model
     {
         return $this->hasMany(Testimonial::class);
     }
-    public function transaction()
+    public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
