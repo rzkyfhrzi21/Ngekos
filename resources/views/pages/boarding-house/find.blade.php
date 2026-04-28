@@ -13,7 +13,7 @@
                     <label
                         class="flex items-center w-full rounded-full p-[14px_20px] gap-3 bg-white ring-1 ring-[#F1F2F6] focus-within:ring-[#91BF77] transition-all duration-300">
                         <img src="assets/images/icons/note-favorite-grey.svg" class="w-5 h-5 flex shrink-0" alt="icon">
-                        <input type="text" name="" id=""
+                        <input type="text" name="search" id=""
                             class="appearance-none outline-none w-full font-semibold placeholder:text-ngekos-grey placeholder:font-normal"
                             placeholder="Type the koskos name">
                     </label>

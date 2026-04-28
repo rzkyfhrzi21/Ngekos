@@ -6,10 +6,15 @@ use App\Http\Controllers\{BoardingHouseController, BookingController, CategoryCo
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/find-kos', [BoardingHouseController::class, 'find'])->name('find-kos');
-Route::get('/find.results', [BoardingHouseController::class, 'findResults'])->name('find-kos.results');
+Route::get('/find-results', [BoardingHouseController::class, 'findResults'])->name('find-kos.results');
 
 Route::get('/kos/{slug}', [BoardingHouseController::class, 'show'])->name('kos.show');
 Route::get('/kos/{slug}/rooms', [BoardingHouseController::class, 'rooms'])->name('kos.rooms');
+
+Route::get('/kos/booking/{slug}', [BookingController::class, 'booking'])->name('booking');
+
+Route::get('/kos/booking/{slug}/information', [BookingController::class, 'information'])->name('booking.information');
+Route::post('/kos/booking/{slug}/information/save', [BookingController::class, 'saveInformation'])->name('booking.information.save');
 
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
