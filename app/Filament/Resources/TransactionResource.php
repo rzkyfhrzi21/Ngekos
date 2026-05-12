@@ -2,19 +2,15 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
+
 use App\Models\Transaction;
+use App\Filament\Resources\TransactionResource\{Pages, RelationManagers};
+use Filament\{Forms, Tables};
+use Filament\Forms\Form;
+use Filament\Forms\Components\{RichEditor, Select, TextInput};
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\TransactionResource\Pages;
-use App\Filament\Resources\TransactionResource\RelationManagers;
+use Filament\Tables\Table;
 
 class TransactionResource extends Resource
 {
@@ -55,11 +51,7 @@ class TransactionResource extends Resource
                         'full_payment' => 'Full'
                     ])
                     ->required(),
-                Forms\Components\Select::make('payment_status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'paid' => 'Paid'
-                    ])
+                Forms\Components\TextInput::make('payment_status')
                     ->required(),
                 Forms\Components\DatePicker::make('start_date')
                     ->required(),
@@ -101,6 +93,7 @@ class TransactionResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

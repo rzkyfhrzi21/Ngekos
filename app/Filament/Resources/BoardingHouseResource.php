@@ -2,19 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BoardingHouseResource\Pages;
-use App\Filament\Resources\BoardingHouseResource\RelationManagers;
-use App\Models\BoardingHouse;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\{Builder, SoftDeletingScope};
 use Illuminate\Support\Str;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\Repeater;
+
+use App\Filament\Resources\BoardingHouseResource\{Pages, RelationManagers};
+use App\Models\BoardingHouse;
+use Filament\{Forms, Tables};
+use Filament\Forms\Form;
+use Filament\Forms\Components\{Repeater, Tabs};
+use Filament\Resources\Resource;
+use Filament\Tables\Table;
 
 class BoardingHouseResource extends Resource
 {
@@ -143,6 +140,7 @@ class BoardingHouseResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

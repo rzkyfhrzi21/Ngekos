@@ -124,5 +124,7 @@ class BookingController extends Controller
         if (!$transaction) {
             return redirect()->back()->with('error', 'Data Transaksi tidak ditemukan');
         }
+
+        return view('pages.booking.detail', compact('transaction'));
     }
 }
