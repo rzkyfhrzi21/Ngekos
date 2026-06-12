@@ -1,5 +1,5 @@
 # Menggunakan image Docker PHP 8.2 (Sesuaikan jika Anda pakai PHP 8.1/8.3)
-image: php:8.2-cli
+image: php:8.3-cli
 
 stages:
   - build
@@ -9,7 +9,7 @@ stages:
 variables:
   # PENTING: Ganti dengan path folder project Anda di cPanel.
   # Contoh: /home/uucdjd7c/public_html atau /home/uucdjd7c/ngekos
-  DEPLOY_PATH: "/home/$SSH_USER/public_html"
+  DEPLOY_PATH: "/home/$SSH_USER/public_html/Ngekos"
 
 # Script yang selalu dijalankan sebelum setiap job (untuk setup SSH)
 before_script:
