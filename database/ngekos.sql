@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2026 at 02:36 PM
+-- Generation Time: Jun 12, 2026 at 09:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,6 +42,13 @@ CREATE TABLE `boarding_houses` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `boarding_houses`
+--
+
+INSERT INTO `boarding_houses` (`id`, `name`, `slug`, `thumbnail`, `city_id`, `category_id`, `description`, `price`, `address`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Kos Rzky One', 'kos-rzky-one', 'kos1.jpg', 1, 1, 'Kos nyaman dekat kampus.', 800000, 'Jl. Zainal Abidin Pagar Alam', '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -59,6 +66,13 @@ CREATE TABLE `bonuses` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `bonuses`
+--
+
+INSERT INTO `bonuses` (`id`, `boarding_house_id`, `image`, `name`, `description`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'wifi.jpg', 'Free WiFi', 'Internet 24 jam', '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -70,14 +84,6 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `cache`
---
-
-INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3', 'i:1;', 1769693731),
-('livewire-rate-limiter:a17961fa74e9275d529f489537f179c05d50c2f3:timer', 'i:1769693731;', 1769693731);
 
 -- --------------------------------------------------------
 
@@ -107,6 +113,13 @@ CREATE TABLE `categories` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `image`, `name`, `slug`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'cat1.jpg', 'Kos Putra', 'kos-putra', '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -122,6 +135,13 @@ CREATE TABLE `cities` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `image`, `name`, `slug`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'city1.jpg', 'Bandar Lampung', 'bandar-lampung', '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -191,17 +211,18 @@ CREATE TABLE `migrations` (
 --
 
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(12, '0001_01_01_000000_create_users_table', 1),
-(13, '0001_01_01_000001_create_cache_table', 1),
-(14, '0001_01_01_000002_create_jobs_table', 1),
-(15, '2025_11_16_132346_create_cities_table', 1),
-(16, '2025_11_16_132427_create_categories_table', 1),
-(17, '2025_11_16_133113_create_boarding_houses_table', 1),
-(18, '2025_11_16_133126_create_rooms_table', 1),
-(19, '2025_11_16_133139_create_room_images_table', 1),
-(20, '2025_11_16_133149_create_bonuses_table', 1),
-(21, '2025_11_16_133200_create_testimonials_table', 1),
-(22, '2025_11_16_133206_create_transactions_table', 1);
+(1, '0001_01_01_000000_create_users_table', 1),
+(2, '0001_01_01_000001_create_cache_table', 1),
+(3, '0001_01_01_000002_create_jobs_table', 1),
+(4, '2025_11_16_132346_create_cities_table', 1),
+(5, '2025_11_16_132427_create_categories_table', 1),
+(6, '2025_11_16_133113_create_boarding_houses_table', 1),
+(7, '2025_11_16_133126_create_rooms_table', 1),
+(8, '2025_11_16_133139_create_room_images_table', 1),
+(9, '2025_11_16_133149_create_bonuses_table', 1),
+(10, '2025_11_16_133200_create_testimonials_table', 1),
+(11, '2025_11_16_133206_create_transactions_table', 1),
+(12, '2026_05_11_100809_create_personal_access_tokens_table', 1);
 
 -- --------------------------------------------------------
 
@@ -213,6 +234,25 @@ CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+CREATE TABLE `personal_access_tokens` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `tokenable_type` varchar(255) NOT NULL,
+  `tokenable_id` bigint(20) UNSIGNED NOT NULL,
+  `name` text NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `abilities` text DEFAULT NULL,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -235,6 +275,13 @@ CREATE TABLE `rooms` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`id`, `boarding_house_id`, `name`, `room_type`, `square_feet`, `capacity`, `price_per_month`, `is_available`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Kamar A1', 'Standard', 12, 1, 800000, 1, '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -249,6 +296,13 @@ CREATE TABLE `room_images` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `room_images`
+--
+
+INSERT INTO `room_images` (`id`, `room_id`, `image`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'room1_1.jpg', '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -265,13 +319,6 @@ CREATE TABLE `sessions` (
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `sessions`
---
-
-INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('QYBWE0lA4zOStkN5oFt5lSHChPoSjObzsc6fwws1', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiUlN0TE1RT29pWGRQR1dOV2tLVWd6Vm03V3lwT1JlcEFkSFBDU2p2USI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQzOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYWRtaW4vYm9hcmRpbmctaG91c2VzIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjE3OiJwYXNzd29yZF9oYXNoX3dlYiI7czo2MDoiJDJ5JDEyJHZBcEFnLmNWQlgvbnBjSVc4ekRqay5TTEJ4Nm50Ti5BMmNud3hQWWJWZUVBQzloVGFsUU5DIjt9', 1769693751);
-
 -- --------------------------------------------------------
 
 --
@@ -282,12 +329,20 @@ CREATE TABLE `testimonials` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `boarding_house_id` bigint(20) UNSIGNED NOT NULL,
   `photo` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `rating` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `testimonials`
+--
+
+INSERT INTO `testimonials` (`id`, `boarding_house_id`, `photo`, `name`, `content`, `rating`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'user1.jpg', 'rizky', 'Kos bersih dan nyaman.', 5, '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -315,6 +370,13 @@ CREATE TABLE `transactions` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `code`, `boarding_house_id`, `room_id`, `name`, `email`, `phone_number`, `payment_method`, `payment_status`, `start_date`, `duration`, `total_amount`, `transaction_date`, `snap_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'TRX-001', 1, 1, 'Andi', 'andi@gmail.com', '081234567890', 'full_payment', 'paid', '2026-06-12', 6, 4800000, '2026-06-12', NULL, '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -338,7 +400,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'RzkyDev666', 'rzkydev666@gmail.com', NULL, '$2y$12$vApAg.cVBX/npcIW8zDjk.SLBx6ntN.A2cnwxPYbVeEAC9hTalQNC', NULL, '2026-01-29 06:33:53', '2026-01-29 06:33:53', NULL);
+(1, 'RzkyDev666', 'rzkydev666@gmail.com', NULL, '$2y$12$6mKhCYcTYTKk8VXmV/kdU.zSanaxYXYmwZoSovCBWYEEX7QpEcWYG', NULL, '2026-06-12 00:10:38', '2026-06-12 00:10:38', NULL);
 
 --
 -- Indexes for dumped tables
@@ -416,6 +478,15 @@ ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
+-- Indexes for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`),
+  ADD KEY `personal_access_tokens_expires_at_index` (`expires_at`);
+
+--
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -467,25 +538,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `boarding_houses`
 --
 ALTER TABLE `boarding_houses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `bonuses`
 --
 ALTER TABLE `bonuses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -503,31 +574,37 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `personal_access_tokens`
+--
+ALTER TABLE `personal_access_tokens`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `room_images`
 --
 ALTER TABLE `room_images`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `testimonials`
 --
 ALTER TABLE `testimonials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`

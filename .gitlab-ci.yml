@@ -1,0 +1,63 @@
+# Menggunakan image Docker PHP 8.2 (Sesuaikan jika Anda pakai PHP 8.1/8.3)
+image: php:8.2-cli
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  # PENTING: Ganti dengan path folder project Anda di cPanel.
+  # Contoh: /home/uucdjd7c/public_html atau /home/uucdjd7c/ngekos
+  DEPLOY_PATH: "/home/$SSH_USER/public_html"
+
+# Script yang selalu dijalankan sebelum setiap job (untuk setup SSH)
+before_script:
+  - apt-get update -y && apt-get install openssh-client rsync unzip git libzip-dev -y
+  - docker-php-ext-install zip
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  # Bypass prompt "Are you sure you want to continue connecting"
+  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+# TAHAP 1: Persiapan (Install Composer)
+build-app:
+  stage: build
+  script:
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --no-interaction --prefer-dist --optimize-autoloader
+    - cp .env.production .env
+  artifacts:
+    paths:
+      - vendor/
+      - .env
+    expire_in: 1 hour
+
+# TAHAP 2: Pengujian
+test-app:
+  stage: test
+  dependencies:
+    - build-app
+  script:
+    - php artisan key:generate
+    # Hapus baris di bawah ini jika project Anda belum ada unit test-nya, agar pipeline tidak error
+    # - php artisan test
+
+# TAHAP 3: Upload ke cPanel & Optimasi
+deploy-production:
+  stage: deploy
+  dependencies:
+    - build-app
+  only:
+    - main # Hanya mendeploy jika push dilakukan ke branch 'main'
+  script:
+    - echo "Memulai proses deploy ke $SSH_HOST..."
+    # Copy semua file ke cPanel menggunakan Rsync
+    - rsync -avz --exclude='.git' --exclude='.gitlab-ci.yml' --exclude='tests' -e "ssh -p 22" ./ $SSH_USER@$SSH_HOST:$DEPLOY_PATH
+
+    # Masuk ke server dan jalankan perintah Artisan
+    - echo "Menjalankan perintah Artisan di server..."
+    - ssh -p 22 $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && php artisan migrate --force && php artisan optimize:clear && php artisan storage:link"
+    - echo "Deploy Selesai! 🎉"

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
-use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Http;
 
 
 class MidtransController extends Controller
@@ -37,10 +37,7 @@ class MidtransController extends Controller
             return response()->json(['message' => 'Transaction not found'], 404);
         }
 
-        $sid    = config('twilio.sid');
-        $token  = config('twilio.token');
-        $fromNumber = config('twilio.from_number');
-        $twilio = new Client($sid, $token);
+        // Fonnte tidak butuh inisialisasi Client di sini, cukup pakai Token nanti di method sendWhatsAppMessage
 
         // Format nomor ke format internasional (+62...)
         $phoneNumber = $this->formatPhoneNumber($transaction->phone_number);
@@ -61,31 +58,19 @@ class MidtransController extends Controller
                 if ($request->payment_type == 'credit_card') {
                     if ($request->fraud_status == 'challenge') {
                         $transaction->payment_status = 'pending';
-                        $this->sendWhatsAppMessage($twilio, $phoneNumber, $fromNumber, $message);
+                        $this->sendWhatsAppMessage($phoneNumber, $message);
                     } else {
                         $transaction->payment_status = 'success';
-                        $this->sendWhatsAppMessage($twilio, $phoneNumber, $fromNumber, $message);
+                        $this->sendWhatsAppMessage($phoneNumber, $message);
                     }
                 }
                 break;
             case 'settlement':
                 $transaction->update(['payment_status' => 'success']);
-                $this->sendWhatsAppMessage($twilio, $phoneNumber, $fromNumber, $message);
+                $this->sendWhatsAppMessage($phoneNumber, $message);
                 break;
             case 'pending':
                 $transaction->update(['payment_status' => 'pending']);
-                dd([
-                    'transaction_status' => $transactionStatus,
-                    'order_id' => $orderId,
-                    'transaction' => $transaction,
-                    'phone_number' => $phoneNumber,
-                    'twilio_config' => [
-                        'sid' => $sid,
-                        'token' => substr($token, 0, 10) . '...', // Hide full token
-                        'from_number' => $fromNumber
-                    ],
-                    'message' => $message
-                ]);
                 break;
             case 'deny':
                 $transaction->update(['payment_status' => 'failed']);
@@ -108,27 +93,36 @@ class MidtransController extends Controller
      * Format nomor telepon ke format internasional
      * Konversi: 08xxx... menjadi +62xxx...
      */
-    private function sendWhatsAppMessage(Client $twilio, string $to, string $from, string $message)
+    private function sendWhatsAppMessage(string $to, string $message)
     {
-        $payload = [
-            'from' => "whatsapp:" . $from,
-            'body' => $message,
-        ];
+        $token = env('FONNTE_TOKEN');
 
-        \Log::info('Twilio WhatsApp send attempt', [
-            'to' => $to,
-            'from' => $from,
-            'payload' => $payload,
+        if (!$token) {
+            \Log::error('Fonnte token is missing in .env');
+            return null;
+        }
+
+        // Fonnte biasanya menggunakan nomor tanpa +
+        $targetNumber = ltrim($to, '+');
+
+        \Log::info('Fonnte WhatsApp send attempt', [
+            'to' => $targetNumber,
+            'message' => $message,
         ]);
 
         try {
-            return $twilio->messages->create("whatsapp:" . $to, $payload);
+            $response = Http::withHeaders([
+                'Authorization' => $token,
+            ])->post('https://api.fonnte.com/send', [
+                'target' => $targetNumber,
+                'message' => $message,
+            ]);
+
+            return $response->json();
         } catch (\Exception $e) {
-            \Log::error('Twilio WhatsApp Error', [
+            \Log::error('Fonnte WhatsApp Error', [
                 'message' => $e->getMessage(),
-                'to' => $to,
-                'from' => $from,
-                'payload' => $payload,
+                'to' => $targetNumber,
             ]);
             return null;
         }
